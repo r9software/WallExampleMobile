@@ -16,4 +16,5 @@ data class WallPaginated(
 data class WallModel( @SerializedName("id") val id: Int,
                       @SerializedName("user_id") val userId: Int,
                       @SerializedName("user_name") val userName: String,
-                      @SerializedName("wall_content") val wallContent: String)
+                      @SerializedName("wall_content") val wallContent: String,
+                      @SerializedName("created_at") val createdAt: String)

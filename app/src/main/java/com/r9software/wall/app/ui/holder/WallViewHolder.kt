@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.r9software.wall.app.R
 import com.r9software.wall.app.data.model.WallModel
 import kotlinx.android.synthetic.main.item_wall.view.*
+import com.r9software.wall.app.util.*
 
 class WallViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -14,6 +15,7 @@ class WallViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         if (wall != null) {
             itemView.txt_wall_name.text = wall.userName
             itemView.txt_wall_content.text = wall.wallContent
+            itemView.txt_wall_time.text = wall.createdAt.formatDate()
 
         }
     }
@@ -26,3 +28,4 @@ class WallViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 }
+
