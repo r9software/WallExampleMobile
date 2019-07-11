@@ -1,5 +1,6 @@
 package com.r9software.wall.app.network
 
+import com.r9software.wall.app.data.model.Response
 import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -9,7 +10,7 @@ import retrofit2.http.Query
 
 interface NetworkService {
 
-    @GET("http://127.0.0.1:8000/api/wall")
+    @GET("http://10.0.2.2:8000/api/wall")
     fun downloadWall(@Query("page") page: Int): Single<Response>
 
     companion object {

@@ -2,8 +2,8 @@ package com.r9software.wall.app.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.r9software.wall.app.data.LoginDataSource
-import com.r9software.wall.app.data.LoginRepository
+import com.r9software.wall.app.data.login.LoginDataSource
+import com.r9software.wall.app.data.login.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

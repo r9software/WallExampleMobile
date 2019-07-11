@@ -1,5 +1,6 @@
-package com.r9software.wall.app.data
+package com.r9software.wall.app.data.login
 
+import com.r9software.wall.app.data.Result
 import com.r9software.wall.app.data.model.LoggedInUser
 import java.io.IOException
 

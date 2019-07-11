@@ -1,4 +1,4 @@
-package com.r9software.wall.app.network
+package com.r9software.wall.app.data.model
 
 import com.google.gson.annotations.SerializedName
 
@@ -15,4 +15,5 @@ data class WallPaginated(
 
 data class WallModel( @SerializedName("id") val id: Int,
                       @SerializedName("user_id") val userId: Int,
+                      @SerializedName("user_name") val userName: String,
                       @SerializedName("wall_content") val wallContent: String)
