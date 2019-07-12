@@ -15,8 +15,10 @@ import com.r9software.wall.app.R
 import com.r9software.wall.app.network.State
 import kotlinx.android.synthetic.main.activity_dashboard_list.*
 import android.view.MenuItem
+import android.widget.Toast
 import com.r9software.wall.app.ui.login.LoginActivity
 import com.r9software.wall.app.util.SharedPreferencesUtil
+import kotlinx.android.synthetic.main.item_wall.*
 
 
 class WallListActivity : AppCompatActivity() {
@@ -33,10 +35,18 @@ class WallListActivity : AppCompatActivity() {
             .get(WallListViewModel::class.java)
         initAdapter()
         initState()
-        btn_post.setOnClickListener{
-            if(!TextUtils.isEmpty(txt_post_wall.text))
-            viewModel.postToWall(txt_post_wall.text.toString())
+        btn_post.setOnClickListener {
+            if (!TextUtils.isEmpty(txt_post_wall.text))
+                viewModel.postToWall(txt_post_wall.text.toString(), this)
         }
+        viewModel.postedResult.observe(this@WallListActivity, Observer {
+            val posted = it ?: return@Observer
+            if (posted) {
+                txt_post_wall.setText("")
+                Toast.makeText(this, "Content posted to the wall", Toast.LENGTH_LONG).show()
+                viewModel.restartPosted()
+            }
+        })
     }
 
     private fun initAdapter() {
@@ -61,7 +71,7 @@ class WallListActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_wall_dashboard, menu)
-        this.menu=menu
+        this.menu = menu
         checkSignIn()
         return true
     }
@@ -73,7 +83,7 @@ class WallListActivity : AppCompatActivity() {
                 startActivityForResult(Intent(this, LoginActivity::class.java), LOGIN_REQUEST)
                 return true
             }
-            R.id.action_logout->{
+            R.id.action_logout -> {
                 SharedPreferencesUtil.getInstance().deleteToken(this)
                 checkSignIn()
                 return true
@@ -97,7 +107,7 @@ class WallListActivity : AppCompatActivity() {
             btn_post.visibility = View.VISIBLE
             menu?.findItem(R.id.action_login)?.isVisible = false
             menu?.findItem(R.id.action_logout)?.isVisible = true
-        }else{
+        } else {
             txt_post_wall.visibility = View.GONE
             btn_post.visibility = View.GONE
             menu?.findItem(R.id.action_login)?.isVisible = true

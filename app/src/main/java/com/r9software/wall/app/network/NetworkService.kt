@@ -21,7 +21,7 @@ interface NetworkService {
 
     @FormUrlEncoded
     @POST("http://10.0.2.2:8000/api/wall")
-    fun postToWall(@Field("wall_content") content: String,@Field("user_id")userId:String): Single<SimpleResponse>
+    fun postToWall(@Field("wall_content") content: String,@Header("Authorization")token:String): Single<SimpleResponse>
 
     @FormUrlEncoded
     @POST("http://10.0.2.2:8000/api/register")

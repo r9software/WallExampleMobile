@@ -2,6 +2,8 @@ package com.r9software.wall.app.data.wall
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
+import com.r9software.wall.app.data.Result
+import com.r9software.wall.app.data.login.LoginCallback
 import com.r9software.wall.app.network.NetworkService
 import com.r9software.wall.app.network.State
 import com.r9software.wall.app.network.WallModel
@@ -10,6 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
 
 class WallDataSource(
     private val networkService: NetworkService,
@@ -79,4 +82,28 @@ class WallDataSource(
         retryCompletable = if (action == null) null else Completable.fromAction(action)
     }
 
+    fun postToWall(text: String,token: String,callback: WallCallback) {
+            try {
+                compositeDisposable.add(
+                    networkService.postToWall(text, "Bearer $token").subscribeOn(Schedulers.io()).
+                        observeOn(AndroidSchedulers.mainThread()).subscribe(
+                        { response ->
+
+                            callback.wallPosted(Result.Success(response.wall.element))
+                        },
+                        {
+                            it.printStackTrace()
+                            setRetry(Action { postToWall(text, "Bearer $token",callback) })
+                        }
+                    ))
+
+            } catch (e: Throwable) {
+                callback.error(Result.Error(IOException("Error logging in", e)))
+            }
+    }
+
+}
+interface WallCallback{
+    fun wallPosted(result:Result.Success<WallModel>)
+    fun error(result: Result.Error)
 }

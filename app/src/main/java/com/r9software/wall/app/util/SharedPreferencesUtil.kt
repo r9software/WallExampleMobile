@@ -19,6 +19,11 @@ class SharedPreferencesUtil private constructor() {
         context.getSharedPreferences(PREFS_NAME,Context.MODE_PRIVATE).edit().remove("wall-app-token").apply()
     }
 
+    fun getToken(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString("wall-app-token", "").toString()
+    }
+
     companion object {
         private var instance: SharedPreferencesUtil? = null
         private val PREFS_NAME = "default_preferences_wall_app"
