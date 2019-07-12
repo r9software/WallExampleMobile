@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.r9software.wall.app.data.model.WallModel
+import com.r9software.wall.app.network.WallModel
 import com.r9software.wall.app.network.State
 import com.r9software.wall.app.ui.holder.ListFooterViewHolder
 import com.r9software.wall.app.ui.holder.WallViewHolder

@@ -5,9 +5,9 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">"Welcome to the wall app!"</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="invalid_password">Password must be >3 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_wall_dashboard">Published recently</string>
     <string name="action_settings">Settings</string>
@@ -16,4 +16,6 @@
     <string name="prompt_password_confirmation">Password Confirmation</string>
     <string name="prompt_name">Name</string>
     <string name="post">Post</string>
+    <string name="action_logout">Logout</string>
+    <string name="password_should_match">Password and confirmation should match</string>
 </resources>

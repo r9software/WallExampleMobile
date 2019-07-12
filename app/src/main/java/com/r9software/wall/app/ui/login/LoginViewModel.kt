@@ -8,8 +8,24 @@ import com.r9software.wall.app.data.login.LoginRepository
 import com.r9software.wall.app.data.Result
 
 import com.r9software.wall.app.R
+import android.content.Context.MODE_PRIVATE
+import android.content.Context
+import com.r9software.wall.app.data.login.LoginCallback
+import com.r9software.wall.app.util.SharedPreferencesUtil
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+
+class LoginViewModel(private val loginRepository: LoginRepository, private val context: Context) : ViewModel(),
+    LoginCallback {
+    override fun loginSuccessfull(result: Result<String>) {
+        if (result is Result.Success) {
+            _loginResult.value = LoginResult(token = result.data)
+            saveToken(result.data)
+        }
+    }
+
+    override fun loginError(result: Result.Error) {
+        _loginResult.value = LoginResult(error = R.string.login_failed)
+    }
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -18,16 +34,20 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     val loginResult: LiveData<LoginResult> = _loginResult
 
     fun login(username: String, password: String) {
-        // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
-
-        if (result is Result.Success) {
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
-        } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
-        }
+        loginRepository.login(username, password, this)
     }
 
+    fun registerDataChanged(username: String, password: String,confirmation:String) {
+        if (!isUserNameValid(username)) {
+            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
+        } else if (!isPasswordValid(password)) {
+            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
+        } else if (password!=confirmation) {
+            _loginForm.value = LoginFormState(passwordError = R.string.password_should_match)
+        } else {
+            _loginForm.value = LoginFormState(isDataValid = true)
+        }
+    }
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
@@ -37,6 +57,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             _loginForm.value = LoginFormState(isDataValid = true)
         }
     }
+
 
     // A placeholder username validation check
     private fun isUserNameValid(username: String): Boolean {
@@ -49,6 +70,14 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5;
+        return password.length > 3
+    }
+
+    fun saveToken(token: String) {
+        SharedPreferencesUtil.getInstance().setToken(context,token)
+    }
+
+    fun register(email: String, password: String, confirmation: String, name: String) {
+        loginRepository.register(email, password,confirmation,name, this)
     }
 }

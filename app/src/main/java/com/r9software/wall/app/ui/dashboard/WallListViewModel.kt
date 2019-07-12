@@ -5,7 +5,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.r9software.wall.app.data.model.WallModel
+import com.r9software.wall.app.network.WallModel
 import com.r9software.wall.app.data.wall.WallDataSource
 import com.r9software.wall.app.data.wall.WallDataSourceFactory
 import com.r9software.wall.app.network.NetworkService
@@ -44,5 +44,9 @@ class WallListViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+    }
+
+    fun postToWall(text: String) {
+
     }
 }

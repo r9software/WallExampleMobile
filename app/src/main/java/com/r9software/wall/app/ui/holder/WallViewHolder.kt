@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.r9software.wall.app.R
-import com.r9software.wall.app.data.model.WallModel
+import com.r9software.wall.app.network.WallModel
 import kotlinx.android.synthetic.main.item_wall.view.*
 import com.r9software.wall.app.util.*
 

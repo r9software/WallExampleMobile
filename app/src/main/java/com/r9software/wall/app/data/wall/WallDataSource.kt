@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.r9software.wall.app.network.NetworkService
 import com.r9software.wall.app.network.State
-import com.r9software.wall.app.data.model.WallModel
+import com.r9software.wall.app.network.WallModel
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

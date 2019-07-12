@@ -6,4 +6,9 @@
           android:title="@string/action_sign_in_short"
           android:orderInCategory="100"
           app:showAsAction="always"/>
+    <item android:id="@+id/action_logout"
+          android:visible="false"
+          android:title="@string/action_logout"
+          android:orderInCategory="100"
+          app:showAsAction="always"/>
 </menu>

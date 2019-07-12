@@ -1,8 +1,8 @@
-package com.r9software.wall.app.data.model
+package com.r9software.wall.app.network
 
 import com.google.gson.annotations.SerializedName
 
-data class Response(
+data class WallResponse(
     @SerializedName("success") val paginatedResponse: WallPaginated
 )
 

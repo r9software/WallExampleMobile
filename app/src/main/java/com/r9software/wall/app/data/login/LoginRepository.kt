@@ -1,7 +1,6 @@
 package com.r9software.wall.app.data.login
 
 import com.r9software.wall.app.data.Result
-import com.r9software.wall.app.data.model.LoggedInUser
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -10,38 +9,15 @@ import com.r9software.wall.app.data.model.LoggedInUser
 
 class LoginRepository(val dataSource: LoginDataSource) {
 
-    // in-memory cache of the loggedInUser object
-    var user: LoggedInUser? = null
-        private set
-
-    val isLoggedIn: Boolean
-        get() = user != null
-
-    init {
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
-        user = null
-    }
-
-    fun logout() {
-        user = null
-        dataSource.logout()
-    }
-
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    fun login(username: String, password: String,callback: LoginCallback){
         // handle login
-        val result = dataSource.login(username, password)
-
-        if (result is Result.Success) {
-            setLoggedInUser(result.data)
-        }
-
-        return result
+        dataSource.login(username, password,callback)
     }
 
-    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
-        this.user = loggedInUser
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
+    fun register(email: String, password: String, confirmation: String, name: String, callback: LoginCallback) {
+
+        dataSource.register(email, password,confirmation,name,callback)
     }
+
+
 }

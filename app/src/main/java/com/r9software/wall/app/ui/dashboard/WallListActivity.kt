@@ -3,9 +3,9 @@ package com.r9software.wall.app.ui.dashboard
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Menu
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -16,10 +16,11 @@ import com.r9software.wall.app.network.State
 import kotlinx.android.synthetic.main.activity_dashboard_list.*
 import android.view.MenuItem
 import com.r9software.wall.app.ui.login.LoginActivity
+import com.r9software.wall.app.util.SharedPreferencesUtil
 
 
 class WallListActivity : AppCompatActivity() {
-
+    private var menu: Menu? = null
     private val LOGIN_REQUEST = 101
     private lateinit var viewModel: WallListViewModel
     private lateinit var newsListAdapter: WallListAdapter
@@ -32,6 +33,10 @@ class WallListActivity : AppCompatActivity() {
             .get(WallListViewModel::class.java)
         initAdapter()
         initState()
+        btn_post.setOnClickListener{
+            if(!TextUtils.isEmpty(txt_post_wall.text))
+            viewModel.postToWall(txt_post_wall.text.toString())
+        }
     }
 
     private fun initAdapter() {
@@ -56,6 +61,8 @@ class WallListActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_wall_dashboard, menu)
+        this.menu=menu
+        checkSignIn()
         return true
     }
 
@@ -63,7 +70,12 @@ class WallListActivity : AppCompatActivity() {
         // Handle item selection
         when (item.getItemId()) {
             R.id.action_login -> {
-                startActivityForResult(Intent(WallListActivity@ this, LoginActivity::class.java), LOGIN_REQUEST)
+                startActivityForResult(Intent(this, LoginActivity::class.java), LOGIN_REQUEST)
+                return true
+            }
+            R.id.action_logout->{
+                SharedPreferencesUtil.getInstance().deleteToken(this)
+                checkSignIn()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -74,8 +86,22 @@ class WallListActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == LOGIN_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                //check if user was registered or was logged in
+                checkSignIn()
             }
+        }
+    }
+
+    private fun checkSignIn() {
+        if (SharedPreferencesUtil.getInstance().isLoggedIn(this)) {
+            txt_post_wall.visibility = View.VISIBLE
+            btn_post.visibility = View.VISIBLE
+            menu?.findItem(R.id.action_login)?.isVisible = false
+            menu?.findItem(R.id.action_logout)?.isVisible = true
+        }else{
+            txt_post_wall.visibility = View.GONE
+            btn_post.visibility = View.GONE
+            menu?.findItem(R.id.action_login)?.isVisible = true
+            menu?.findItem(R.id.action_logout)?.isVisible = false
         }
     }
 }
